@@ -2,7 +2,7 @@ FROM debian:jessie
 
 MAINTAINER Christian Luginbühl <dinkel@pimprecords.com>
 
-ENV CLAMAV_VERSION 0.100
+ENV CLAMAV_VERSION 0.99
 
 RUN echo "deb http://http.debian.net/debian/ jessie main contrib non-free" > /etc/apt/sources.list && \
     echo "deb http://http.debian.net/debian/ jessie-updates main contrib non-free" >> /etc/apt/sources.list && \
@@ -26,6 +26,9 @@ RUN mkdir /var/run/clamav && \
     chmod 750 /var/run/clamav
 
 RUN sed -i 's/^Foreground .*$/Foreground true/g' /etc/clamav/clamd.conf && \
+    sed -i 's/^MaxScanSize .*$/MaxScanSize 900M/g' /etc/clamav/clamd.conf && \
+    sed -i 's/^MaxFileSize .*$/MaxFileSize 300M/g' /etc/clamav/clamd.conf && \
+    sed -i 's/^StreamMaxLength .*$/StreamMaxLength 300M/g' /etc/clamav/clamd.conf && \
     echo "TCPSocket 3310" >> /etc/clamav/clamd.conf && \
     sed -i 's/^Foreground .*$/Foreground true/g' /etc/clamav/freshclam.conf
 
